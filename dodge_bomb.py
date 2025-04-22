@@ -54,11 +54,13 @@ def game_over(screen: pg.Surface,overlay: pg.Surface,go_text: pg.Surface,go_rct:
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
+
     # こうかとん初期化
     bg_img = pg.image.load("fig/pg_bg.jpg")    
     kk_img = pg.transform.rotozoom(pg.image.load("fig/3.png"), 0, 0.9)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300, 200
+
     # 爆弾初期化
     bb_img = pg.Surface((20, 20))
     pg.draw.circle(bb_img, (255, 0, 0), (10, 10), 10)
@@ -67,10 +69,12 @@ def main():
     bb_rct.centery = random.randint(0, HEIGHT)
     bb_img.set_colorkey((0, 0, 0))
     vx, vy = +5, +5
+
     # ゲームオーバー画面の背景
     overlay = pg.Surface((WIDTH, HEIGHT))
     overlay.fill((0, 0, 0, )) 
     overlay.set_alpha(180)
+    
     #ゲームオーバーテキスト
     font = pg.font.Font(None, 80)
     go_text = font.render("Game Over", True, (255, 255, 255))
