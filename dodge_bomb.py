@@ -1,6 +1,7 @@
 import os
 import random
 import sys
+import time
 import pygame as pg
 
 
@@ -29,7 +30,16 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
         tate = False
     return yoko, tate
 
-
+def game_over(screen, overlay, go_text, go_rct, gokk_img, gokk_rct1, gokk_rct2):
+    """
+    ゲームオーバー画面を表示し、5秒待機する関数
+    """
+    screen.blit(overlay, (0, 0))  # オーバーレイを描画
+    screen.blit(go_text, go_rct)  # テキストを描画
+    screen.blit(gokk_img, gokk_rct1)
+    screen.blit(gokk_img, gokk_rct2)
+    pg.display.update()           # 画面更新
+    time.sleep(5)                 # 5秒待機
 
 
 def main():
@@ -48,6 +58,18 @@ def main():
     bb_rct.centery = random.randint(0, HEIGHT)
     bb_img.set_colorkey((0, 0, 0))
     vx, vy = +5, +5
+    # ゲームオーバー画面
+    overlay = pg.Surface((WIDTH, HEIGHT))
+    overlay.fill((0, 0, 0, )) 
+    overlay.set_alpha(180)
+    #ゲームオーバーテキスト
+    font = pg.font.Font(None, 80)
+    go_text = font.render("Game Over", True, (255, 255, 255))
+    go_rct = go_text.get_rect(center=(WIDTH/2, HEIGHT/2))
+    gokk_img = pg.transform.rotozoom(pg.image.load("fig/8.png"), 0, 1)
+    gokk_rct1 = gokk_img.get_rect(center=(WIDTH/3, HEIGHT/2))
+    gokk_rct2 = gokk_img.get_rect(center=(WIDTH-WIDTH/3, HEIGHT/2))
+
 
     clock = pg.time.Clock()
     tmr = 0
@@ -59,7 +81,10 @@ def main():
 
         # こうかとんと爆弾が重なったら終了
         if kk_rct.colliderect(bb_rct):
+            # ゲームオーバー時の描画処理
+            game_over(screen, overlay, go_text, go_rct, gokk_img, gokk_rct1, gokk_rct2)
             return
+
 
         key_lst = pg.key.get_pressed()
         sum_mv = [0, 0]
@@ -80,6 +105,7 @@ def main():
         if check_bound(kk_rct) != (True, True): # 画面外だったら
             kk_rct.move_ip(-sum_mv[0], -sum_mv[1]) # 画面内に戻す
         screen.blit(kk_img, kk_rct)
+
         bb_rct.move_ip(vx, vy)  # 爆弾の移動
         yoko, tate = check_bound(bb_rct)
         if not yoko:  # 左右どちらかにはみ出ていたら
