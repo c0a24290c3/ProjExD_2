@@ -30,7 +30,8 @@ def check_bound(rct: pg.Rect) -> tuple[bool, bool]:
         tate = False
     return yoko, tate
 
-def game_over(screen, overlay, go_text, go_rct, gokk_img, gokk_rct1, gokk_rct2):
+#ゲームオーバー画面
+def game_over(screen: pg.Surface,overlay: pg.Surface,go_text: pg.Surface,go_rct: pg.Rect,gokk_img: pg.Surface,gokk_rct1: pg.Rect,gokk_rct2: pg.Rect) -> None:
     """
     ゲームオーバー画面を表示し、5秒待機する関数
     """
@@ -40,6 +41,14 @@ def game_over(screen, overlay, go_text, go_rct, gokk_img, gokk_rct1, gokk_rct2):
     screen.blit(gokk_img, gokk_rct2)
     pg.display.update()           # 画面更新
     time.sleep(5)                 # 5秒待機
+
+#爆弾が拡大、加速
+# def init_bb_imgs() -> tuple[list[pg.Surface], list[int]]:
+#    bb_accs = [a for a in range(1,11)]
+#    for r in range(1, 11):
+#    bb_img = pg.Surface((20*r, 20*r))
+#    pg.draw.circle(bb_img, (255, 0, 0), (10*r, 10*r), 10*r)
+
 
 
 def main():
@@ -58,7 +67,7 @@ def main():
     bb_rct.centery = random.randint(0, HEIGHT)
     bb_img.set_colorkey((0, 0, 0))
     vx, vy = +5, +5
-    # ゲームオーバー画面
+    # ゲームオーバー画面の背景
     overlay = pg.Surface((WIDTH, HEIGHT))
     overlay.fill((0, 0, 0, )) 
     overlay.set_alpha(180)
